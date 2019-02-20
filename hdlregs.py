@@ -875,7 +875,7 @@ class Module():
             raise ModuleError(self, "unsupported width '%d' -- HDLRegs currently supports only the following register widths: %s" % (self.width, str_supported_widths))
         # elaborate & check
         self.elaborate()   
-        self.check()                 #
+        self.check()                 #
     # Check a module
     def check(self):
         pass
@@ -945,7 +945,7 @@ class Register:
     def __init__(self, json_reg, parent_module):
         #
         # default values:
-        self.parent_module_ = parent_module
+        self.parent_module_ = parent_module
         self.name = ""
         self.description = None
         self.access = "read-write"
@@ -1003,7 +1003,7 @@ class Register:
         for f in self.fields:
             if f.access() == "read-only" or f.access() == "read-write":
                 return True        
-        return False        #
+        return False        #
     # Returns True if the register is user-writable, i.e. if it has at least one user-writable field
     def is_user_writable(self):
         for f in self.fields:
@@ -1019,7 +1019,7 @@ class Register:
                 and_mask = ~((2 ** f.bitWidth - 1) << f.bitOffset)
                 reset &= and_mask
                 or_mask = f.reset() << f.bitOffset
-                reset |= or_mask        return reset
+                reset |= or_mask        return reset
     #
     # Get a registers's size
     def size(self):
