@@ -117,7 +117,8 @@ License
 
 HDLRegs is released under the terms of the "FreeBSD License", a permissive free software license:
 
-    Copyright (c) 2013, Guy Eschemann
+    Copyright (c) 2013, Guy Eschemann,
+    	          2018, Fastree3D
     All rights reserved.
     
     Redistribution and use in source and binary forms, with or without

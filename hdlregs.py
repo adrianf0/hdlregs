@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-# Copyright (c) 2013, Guy Eschemann
+# Copyright (c) 2013, Guy Eschemann,
+#               2019, Fastree3D
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
