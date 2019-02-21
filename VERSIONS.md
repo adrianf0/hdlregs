@@ -1,6 +1,12 @@
 HDLRegs Versions
 ================
 
+Version 0.6 (21-FEB-2019)
+-------------------------
+
+  * Added AXI4-Lite adapter
+
+
 Version 0.5 (17-DEC-2013)
 -------------------------
 

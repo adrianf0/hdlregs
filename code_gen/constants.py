@@ -2,7 +2,7 @@
 # Constants
 #
 
-HDLREGS_VERSION = "0.5"
+HDLREGS_VERSION = "0.6"
 
 INDENTATION_WIDTH = 4
 
