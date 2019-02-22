@@ -323,7 +323,7 @@ class Register:
 # A register field        
 class Field:
     MANDATORY_ELEMENTS = ("name", "description", "bitWidth")
-    OPTIONAL_ELEMENTS = ("bitOffset", "reset", "access", "selfClear")
+    OPTIONAL_ELEMENTS = ("bitOffset", "reset", "access", "selfClear/Set")
     #
     # Field constructor    
     def __init__(self, json_field, parent_reg):
@@ -336,7 +336,7 @@ class Field:
         self.bitOffset = None
         self._reset = None
         self._access = None
-        self.selfClear = None
+        self.selfClearSet = None
         #
         # initialize fields from JSON    
         for key in json_field.keys():
@@ -352,8 +352,8 @@ class Field:
                 self._reset = int_from_json(json_field[key])
             elif key == "access":
                 self._access = json_field[key]
-            elif key == "selfClear":
-                self.selfClear = json_field[key]
+            elif key == "selfClear/Set":
+                self.selfClearSet = int_from_json(json_field[key])
             else:
                 raise FieldError(self, "unsupported element '%s'" % key)                 
         #
@@ -392,6 +392,10 @@ class Field:
                 raise FieldError(self, "reset value out of range")
             if(self._reset > 2 ** self.bitWidth - 1):
                 raise FieldError(self, "reset value out of range")
+        if(self.selfClearSet != None):
+            if(not self.selfClearSet in [0, 1]):
+                raise FieldError(self, "selfClear/Set can be either 0 or 1 (all bits of the field are either cleared or set respectively)")
+
     #
     # Returns the reset value of a field, which may be inherited from the parent register
     def reset(self):

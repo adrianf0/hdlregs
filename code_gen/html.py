@@ -60,8 +60,12 @@ class HtmlGenerator():
             elif access == "write-only":
                 field_access = "W"
             #
-            if element.selfClear:
-                field_selfClear = "Self-clearing"
+            if element.selfClearSet != None:
+                if(element.selfClearSet == 0):
+                    field_selfClear = "Self-clearing"
+                else:
+                    field_selfClear = "Self-setting"
+
             else:
                 field_selfClear = "&nbsp;"
             #

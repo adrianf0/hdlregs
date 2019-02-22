@@ -34,25 +34,25 @@
               "fields"        :
                   [
                     {
-                        "name"        : "reset",
-                        "description" : "reset the module",
-                        "bitOffset"   : 31,
-                        "bitWidth"    : 1,
-                        "reset"       : 1
+                        "name"          : "reset",
+                        "description"   : "reset the module",
+                        "bitOffset"     : 31,
+                        "bitWidth"      : 1,
+                        "reset"         : 1
                     },
                     {
-                        "name"        : "done",
-                        "description" : "signals that the processing has completed",
-                        "bitWidth"    : 1,
-                        "access"      : "read-only"
+                        "name"          : "done",
+                        "description"   : "signals that the processing has completed",
+                        "bitWidth"      : 1,
+                        "access"        : "read-only"
                     },                                      
                     {
-                        "name"        : "start",
-                        "description" : "start the module",
-                        "bitWidth"    : 1,
-                        "access"      : "write-only",
-                        "bitOffset"   : 0,
-                        "selfClear"   : true						
+                        "name"          : "start",
+                        "description"   : "start the module",
+                        "bitWidth"      : 1,
+                        "access"        : "write-only",
+                        "bitOffset"     : 0,
+                        "selfClear/Set" : 0						
                     }                  
                   ]          
             }

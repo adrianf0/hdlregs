@@ -51,25 +51,25 @@ Here is an example register specification showcasing a few capabilities of HDLRe
               "fields"        :
                   [
                     {
-                        "name"        : "reset",
-                        "description" : "reset the module",
-                        "bitOffset"   : 31,
-                        "bitWidth"    : 1,
-                        "reset"       : 1
+                        "name"          : "reset",
+                        "description"   : "reset the module",
+                        "bitOffset"     : 31,
+                        "bitWidth"      : 1,
+                        "reset"         : 1
                     },
                     {
-                        "name"        : "done",
-                        "description" : "signals that the processing has completed",
-                        "bitWidth"    : 1,
-                        "access"      : "read-only"
+                        "name"          : "done",
+                        "description"   : "signals that the processing has completed",
+                        "bitWidth"      : 1,
+                        "access"        : "read-only"
                     },                                      
                     {
-                        "name"        : "start",
-                        "description" : "start the processing",
-                        "bitWidth"    : 1,
-                        "access"      : "write-only",
-                        "bitOffset"   : 0,
-                        "selfClear"   : true
+                        "name"          : "start",
+                        "description"   : "start the processing",
+                        "bitWidth"      : 1,
+                        "access"        : "write-only",
+                        "bitOffset"     : 0,
+                        "selfClear/Set" : 0
                     }                  
                   ]          
             }
@@ -79,6 +79,10 @@ Here is an example register specification showcasing a few capabilities of HDLRe
 Reset
 -----
 If "reset" attribute is defined, the tool generates a register with an asynchronous reset. Otherwise, reset is not generated. If any field of a register has a reset attribute defined, then all other fields of the register are reset as well (to '0').
+
+Self Clear/Set
+--------------
+If defined, value of "selfClear/Set" attribute defines whether a field of the register is cleared (0) or set (1). In "read-write" and "write-only" access mode, the clear/set operation occurs at the write operation. In "read-only" access mode, the clear/set takes place during read operation.  
 
 You can have a look at the generated files in the [example/output](https://github.com/noasic/hdlregs/tree/master/example/output) directory.
 

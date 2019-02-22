@@ -163,15 +163,20 @@ class VhdlComponentGenerator(CodeGenerator):
             if r.is_bus_writable():
                 register_write_proc.statements.append(VhdlStatement("%s <= '0';\n" % self.vhdl_strobe_signal(r)))
         # self-clearing fields
-        register_write_proc.statements.append(VhdlStatement("-- self-clearing fields:\n"))
+        register_write_proc.statements.append(VhdlStatement("-- self-clearing/setting fields:\n"))
         for r in module.registers:
-            if r.is_bus_writable():
-                reg_data_signal = self.vhdl_data_signal(r)
-                for f in r.fields:
-                    if f.selfClear:
-                        index_high = "%s + %s - 1" % (self.bitOffset_identifier(f), self.bitWidth_identifier(f))
-                        index_low = self.bitOffset_identifier(f)
-                        register_write_proc.statements.append(VhdlStatement("%s(%s downto %s) <= (others => '0');\n" % (reg_data_signal, index_high, index_low)))
+            reg_data_signal = self.vhdl_data_signal(r)
+            for f in r.fields:
+                if f.selfClearSet != None:
+                    index_high = "%s + %s - 1" % (self.bitOffset_identifier(f), self.bitWidth_identifier(f))
+                    index_low = self.bitOffset_identifier(f)
+                    if f.is_user_writable():
+                        read_only_clear_block = VhdlIfStatement("addr = %s and cs = '1' and rnw = '1'" % self.address_identifier(r))
+                        read_only_clear_block.statements.append(VhdlStatement("%s(%s downto %s) <= (others => '%0d');\n" % (reg_data_signal, index_high, index_low, f.selfClearSet)))
+                        register_write_proc.statements.append(read_only_clear_block)
+                    else:
+                        register_write_proc.statements.append(VhdlStatement("%s(%s downto %s) <= (others => '%0d');\n" % (reg_data_signal, index_high, index_low, f.selfClearSet)))
+                        
         # bus-write
         register_write_proc.statements.append(VhdlStatement("-- bus write:\n"))
         bus_write_block = VhdlIfStatement("cs = '1' and rnw = '0'")
