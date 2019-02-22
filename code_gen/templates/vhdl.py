@@ -29,7 +29,7 @@ use work.$package_name.all;
 entity $entity_name is
     port(
         clk     : in  std_logic;                     -- system clock
-        rst     : in  std_logic;                     -- synchronous, high-active
+        rst     : in  std_logic;                     -- asynchronous, high-active
         addr    : in  std_logic_vector(31 downto 0); -- read/write address
         cs      : in  std_logic;                     -- chip select
         rnw     : in  std_logic;                     -- read (1) or write (0)

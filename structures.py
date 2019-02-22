@@ -170,7 +170,7 @@ class Register:
         self.description = None
         self.access = "read-write"
         self.addressOffset = None
-        self._reset = 0                                
+        self._reset = None                                
         self.fields = []        
         #
         # initialize fields from JSON    
@@ -234,6 +234,14 @@ class Register:
     # Get a registers's reset value        
     def reset(self):
         reset = self._reset  # this is the default reset value, which may be overridden on a field basis
+
+        # if any field has a reset, then all other fields of the register are reset as well (to 0).
+        if reset == None:
+            for f in self.fields:
+                if f.has_reset():
+                    reset = 0
+                    break
+                
         for f in self.fields:
             if f.has_reset():
                 and_mask = ~((2 ** f.bitWidth - 1) << f.bitOffset)
@@ -256,9 +264,10 @@ class Register:
         if self.access not in self.ACCESS:
             raise RegisterError(self, "'%s' is not a valid access mode" % self.access)
         #
-        # check reset value        
-        if(self._reset < 0 or self._reset > 2 ** self.size() - 1):
-            raise(RegisterError(self, "reset value (%d) is of out range" % self._reset))
+        # check reset value
+        if(self._reset != None):  #there is a reset value specified
+            if(self._reset < 0 or self._reset > 2 ** self.size() - 1):
+                raise(RegisterError(self, "reset value (%d) is of out range" % self._reset))
         #
         # Check that the register is wide-enough to hold all the bit fields
         bit_field_total_length = 0
@@ -388,9 +397,10 @@ class Field:
     def reset(self):
         if self._reset == None:
             reset = self.parent_reg._reset # don't call reset() as this would create an infinite recursion
-            reset >>= self.bitOffset
-            and_mask = 2 ** self.bitWidth - 1
-            reset &= and_mask
+            if reset != None:
+                reset >>= self.bitOffset
+                and_mask = 2 ** self.bitWidth - 1
+                reset &= and_mask
             return reset
         else:
             return self._reset
@@ -399,7 +409,7 @@ class Field:
     # False if the reset inherits its reset value from the 
     # parent register.
     def has_reset(self):
-        if self.reset == None:
+        if self._reset == None:
             return False
         else:
             return True

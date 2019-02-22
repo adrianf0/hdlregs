@@ -92,23 +92,19 @@ class VhdlClockedProcess:
         self.statements = []
     #
     def to_str(self, level):
-        s = indent(level) + '%s : process(%s) is\n' % (self.name, self.clock)
+        s = indent(level) + '%s : process(%s, %s) is\n' % (self.name, self.clock, self.reset)
         s += indent(level) + 'begin\n'
-        level += 1
-        s += indent(level) + "if rising_edge(%s) then\n" % self.clock
         level += 1
         s += indent(level) + "if %s = '1' then\n" % self.reset
         level += 1
         for st in self.reset_statements:
             s += "%s" % st.to_str(level)
         level -= 1
-        s += indent(level) + "else\n"
-        level += 1 
+        s += indent(level) + "elsif rising_edge(%s) then\n" % self.clock
+        level += 1
         for st in self.statements:            
             s += st.to_str(level)
         level -= 1
-        s += indent(level) + "end if;\n"
-        level -= 1        
         s += indent(level) + "end if;\n"
         level -= 1        
         s += indent(level) + 'end process %s;\n' % self.name
@@ -150,16 +146,17 @@ class VhdlComponentGenerator(CodeGenerator):
         # Signal declarations
         signal_declarations = VhdlCodeBlock()
         for r in module.registers:
-            signal_declarations.statements.append(VhdlStatement('signal %s : std_logic_vector(31 downto 0) := x"%.8X";\n' % (self.vhdl_data_signal(r), r.reset())))
+            signal_declarations.statements.append(VhdlStatement('signal %s : std_logic_vector(31 downto 0);\n' % (self.vhdl_data_signal(r))))
             if r.is_bus_writable():
                 signal_declarations.statements.append(VhdlStatement("signal %s : std_logic := '0';\n" % (self.vhdl_strobe_signal(r))))
-        
         #
         # Register-write process
         register_write_proc = VhdlClockedProcess("register_write", "clk", "rst")
         # resets
         for r in module.registers:
-            register_write_proc.reset_statements.append(VhdlStatement('%s <= x"%.8X";\n' % (self.vhdl_data_signal(r), r.reset())))
+            if r.reset() != None:
+                register_write_proc.reset_statements.append(VhdlStatement('%s <= x"%.8X";\n' % (self.vhdl_data_signal(r), r.reset())))
+
         # defaults
         register_write_proc.statements.append(VhdlStatement("-- defaults:\n"))
         for r in module.registers:
