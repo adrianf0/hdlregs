@@ -28,16 +28,17 @@ Here is an example register specification showcasing a few capabilities of HDLRe
               "fields"        :
                   [
                     {
-                        "name"        : "high",
-                        "description" : "high-byte of the version number",
-                        "bitWidth"    : 8,
-                        "reset"       : 1
+                        "name"            : "high",
+                        "description"     : "high-byte of the version number",
+                        "bitWidth"        : 8,
+			"userWriteStrobe" : "yes",
+                        "reset"           : 1
                     },                            
                     {
-                        "name"        : "low",
-                        "description" : "low-byte of the version number",
-                        "bitWidth"    : 8,
-                        "reset"       : 0                        
+                        "name"            : "low",
+                        "description"     : "low-byte of the version number",
+                        "bitWidth"        : 8,
+                        "reset"           : 0                        
                     }
                   ]                        
             },

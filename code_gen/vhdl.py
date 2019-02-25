@@ -198,9 +198,13 @@ class VhdlComponentGenerator(CodeGenerator):
         for r in module.registers:
             for f in r.fields:
                 if f.is_user_writable():
-                    field_write_block = VhdlIfStatement("user2regs.%s.%s.strobe = '1'" % (r.name, f.name))
-                    field_write_block.statements.append(VhdlStatement("%s(%s + %s - 1 downto %s) <= user2regs.%s.%s.value;\n" % (self.vhdl_data_signal(r), self.bitOffset_identifier(f), self.bitWidth_identifier(f), self.bitOffset_identifier(f), r.name, f.name)))
-                    register_write_proc.statements.append(field_write_block)
+                    if f.has_userWriteStrobe():
+                        field_write_block = VhdlIfStatement("user2regs.%s.%s.strobe = '1'" % (r.name, f.name))
+                        field_write_block.statements.append(VhdlStatement("%s(%s + %s - 1 downto %s) <= user2regs.%s.%s.value;\n" % (self.vhdl_data_signal(r), self.bitOffset_identifier(f), self.bitWidth_identifier(f), self.bitOffset_identifier(f), r.name, f.name)))
+                        register_write_proc.statements.append(field_write_block)
+                    else:
+                        register_write_proc.statements.append(VhdlStatement("%s(%s + %s - 1 downto %s) <= user2regs.%s.%s.value;\n" % (self.vhdl_data_signal(r), self.bitOffset_identifier(f), self.bitWidth_identifier(f), self.bitOffset_identifier(f), r.name, f.name)))
+
         #
         # Bus-read process
         bus_read_proc = VhdlAsyncProcess("bus_read")

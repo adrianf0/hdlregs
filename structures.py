@@ -323,7 +323,7 @@ class Register:
 # A register field        
 class Field:
     MANDATORY_ELEMENTS = ("name", "description", "bitWidth")
-    OPTIONAL_ELEMENTS = ("bitOffset", "reset", "access", "selfClear/Set")
+    OPTIONAL_ELEMENTS = ("bitOffset", "reset", "access", "selfClear/Set", "userWriteStrobe")
     #
     # Field constructor    
     def __init__(self, json_field, parent_reg):
@@ -337,6 +337,7 @@ class Field:
         self._reset = None
         self._access = None
         self.selfClearSet = None
+        self.userWriteStrobe = "no"
         #
         # initialize fields from JSON    
         for key in json_field.keys():
@@ -354,6 +355,8 @@ class Field:
                 self._access = json_field[key]
             elif key == "selfClear/Set":
                 self.selfClearSet = int_from_json(json_field[key])
+            elif key == "userWriteStrobe":
+                self.userWriteStrobe = json_field[key]
             else:
                 raise FieldError(self, "unsupported element '%s'" % key)                 
         #
@@ -395,6 +398,9 @@ class Field:
         if(self.selfClearSet != None):
             if(not self.selfClearSet in [0, 1]):
                 raise FieldError(self, "selfClear/Set can be either 0 or 1 (all bits of the field are either cleared or set respectively)")
+        if self.userWriteStrobe  not in ["yes", "no"]:
+            raise FieldError(self, "'%s' is not a valid value for userWriteStrobe (which can be 'yes' or 'no')" % self.access)
+
 
     #
     # Returns the reset value of a field, which may be inherited from the parent register
@@ -447,3 +453,11 @@ class Field:
             return True   
         return False
 
+    #
+    # Returns True if update of the field (in read-only mode) should be conditioned by a user strobe signal.
+    # Otherwise, the value of the field (in read-only mode) is updated at every clock cycle.
+    def has_userWriteStrobe(self):
+        if self.userWriteStrobe == "yes":
+            return True
+        return False
+        
