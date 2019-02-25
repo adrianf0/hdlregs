@@ -103,22 +103,22 @@ It takes a register specification in JSON format and generates the following out
         # Write HTML output
         if arguments.nohtml:
             g = code_gen.html.HtmlGenerator(module)
-            g.save(arguments.html_output_dir + module.name + '_regs.html')
+            g.save(arguments.html_output_dir + '/' + module.name + '_regs.html')
 
         # Write C header
         if arguments.noc:
             g = code_gen.c.CHeaderGenerator(module)
-            g.save(arguments.c_output_dir + module.name + '_regs.h')
+            g.save(arguments.c_output_dir + '/' + module.name + '_regs.h')
 
         # Write VHDL output
         if arguments.novhdl:
             # Write VHDL package
             g = code_gen.vhdl.VhdlPackageGenerator(module)
-            g.save(arguments.vhdl_output_dir + module.name + '_regs_pkg.vhd')
+            g.save(arguments.vhdl_output_dir + '/' + module.name + '_regs_pkg.vhd')
 
             # Write VHDL component
             g = code_gen.vhdl.VhdlComponentGenerator(module)
-            g.save(arguments.vhdl_output_dir + module.name + '_regs.vhd')
+            g.save(arguments.vhdl_output_dir + '/' + module.name + '_regs.vhd')
                             
     except RegisterError as ex:
         print "Error in register " + str(ex)
