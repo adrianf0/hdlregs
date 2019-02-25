@@ -39,6 +39,7 @@ from structures import Module, ModuleError, RegisterError, FieldError
 import code_gen.vhdl
 import code_gen.html
 import code_gen.c
+import code_gen.constants as constants
             
 # ------------------------------------------------------------------------------
 # The main() function
@@ -80,6 +81,7 @@ It takes a register specification in JSON format and generates the following out
                         help='prevents html output generation')
     parser.add_argument('-html_output_dir', action=writable_dir, default='.',
                         help='path to the HTML output directory')
+    parser.add_argument('--version', action='version', version=constants.HDLREGS_VERSION)    
     arguments = parser.parse_args()
 
     # Check for non-ascii characters in JSON file, as these are not supported yet
