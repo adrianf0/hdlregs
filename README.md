@@ -85,14 +85,38 @@ Self Clear/Set
 --------------
 If defined, value of "selfClear/Set" attribute defines whether a field of the register is cleared (0) or set (1). In "read-write" and "write-only" access mode, the clear/set operation occurs at the write operation. In "read-only" access mode, the clear/set takes place during read operation.  
 
-You can have a look at the generated files in the [example/output](https://github.com/noasic/hdlregs/tree/master/example/output) directory.
+You can have a look at the [example configuration](example/example.json) and the generated files in the [example](example/) directory.
 
 Usage
 =====
+hdlregs.py [-h] [-novhdl] [-vhdl_output_dir VHDL_OUTPUT_DIR] [-noc]
+           [-c_output_dir C_OUTPUT_DIR] [-nohtml]
+           [-html_output_dir HTML_OUTPUT_DIR] [--version]
+           register_definition_file
 
-To generate the output files from the JSON specification, execute the hdlregs.py script with the path to the JSON register specification as an argument. e.g.:
-    
-    python hdlregs.py example/example.json
+HDLRegs is an open-source HDL register file generator written in the Python programming language. 
+It takes a register specification in JSON format and generates the following output files:
+ * VHDL package
+ * Synthesizable VHDL component
+ * C header
+ * HTML documentation.
+
+positional arguments:
+  register_definition_file
+                        register definition file in JSON format
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -novhdl               prevents VHDL output generation
+  -vhdl_output_dir VHDL_OUTPUT_DIR
+                        path to the VHDL output directory
+  -noc                  prevents C output generation
+  -c_output_dir C_OUTPUT_DIR
+                        path to the C output directory
+  -nohtml               prevents html output generation
+  -html_output_dir HTML_OUTPUT_DIR
+                        path to the HTML output directory
+  --version             show program's version number and exit
 
 Compatibility
 =============
